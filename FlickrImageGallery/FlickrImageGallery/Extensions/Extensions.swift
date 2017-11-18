@@ -19,10 +19,13 @@ extension String {
     }
     
     func getAuthorName() -> String {
-        var trimmed = self.replacingOccurrences(of: "nobody@flickr.com ", with: "")
-        trimmed = String(trimmed.dropFirst())
-        trimmed = String(trimmed.dropLast())
-        trimmed = trimmed.replacingOccurrences(of: "\"", with: "")
+        var trimmed = self
+        if let index = trimmed.index(of: "\"") {
+            trimmed = String(trimmed[trimmed.index(after: index)...])
+        }
+        if let index = trimmed.index(of: "\"") {
+            trimmed = String(trimmed[..<index])
+        }
         return trimmed
     }
 }
