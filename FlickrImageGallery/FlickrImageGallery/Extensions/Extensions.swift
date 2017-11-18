@@ -10,14 +10,8 @@ import Foundation
 
 extension String {
     
-    private static var formatter:DateFormatter {
-        let frm = DateFormatter()
-        frm.dateFormat = "yyyy-MM-dd'T'HH:mm:ssxxxxx"
-        return frm
-    }
-    
     func toDate() -> Date? {
-        return String.formatter.date(from: self)
+        return Date.inputFormatter.date(from: self)
     }
     
     func getAuthorName() -> String {
@@ -27,5 +21,24 @@ extension String {
             trimmed.remove(at: trimmed.endIndex)
         }
         return trimmed
+    }
+}
+
+extension Date {
+    
+    static var inputFormatter:DateFormatter {
+        let frm = DateFormatter()
+        frm.dateFormat = "yyyy-MM-dd'T'HH:mm:ssxxxxx"
+        return frm
+    }
+    
+    static var outputFormatter:DateFormatter {
+        let frm = DateFormatter()
+        frm.dateFormat = "yyyy-MM-dd"
+        return frm
+    }
+    
+    func toString() -> String {
+        return Date.outputFormatter.string(from: self)
     }
 }

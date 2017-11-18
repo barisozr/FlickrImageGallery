@@ -16,6 +16,8 @@
 		0B8DF0C71FC02D8100292F4F /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8DF0C61FC02D8100292F4F /* NetworkManager.swift */; };
 		0B8DF0CA1FC0300A00292F4F /* FlickrItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8DF0C91FC0300A00292F4F /* FlickrItem.swift */; };
 		0B8DF0D11FC03E3C00292F4F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8DF0D01FC03E3C00292F4F /* Extensions.swift */; };
+		0B8DF0D31FC0588800292F4F /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8DF0D21FC0588800292F4F /* ListVC.swift */; };
+		0B8DF0D51FC05A3A00292F4F /* FlickrCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8DF0D41FC05A3A00292F4F /* FlickrCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		0B8DF0C61FC02D8100292F4F /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		0B8DF0C91FC0300A00292F4F /* FlickrItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrItem.swift; sourceTree = "<group>"; };
 		0B8DF0D01FC03E3C00292F4F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		0B8DF0D21FC0588800292F4F /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
+		0B8DF0D41FC05A3A00292F4F /* FlickrCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +129,8 @@
 		0B8DF0C31FC02D6300292F4F /* List */ = {
 			isa = PBXGroup;
 			children = (
+				0B8DF0D21FC0588800292F4F /* ListVC.swift */,
+				0B8DF0D41FC05A3A00292F4F /* FlickrCell.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -264,10 +270,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B8DF0D31FC0588800292F4F /* ListVC.swift in Sources */,
 				0B8DF0D11FC03E3C00292F4F /* Extensions.swift in Sources */,
 				0B8DF0C71FC02D8100292F4F /* NetworkManager.swift in Sources */,
 				0B8DF0CA1FC0300A00292F4F /* FlickrItem.swift in Sources */,
 				0B8DF0A41FC028F700292F4F /* ViewController.swift in Sources */,
+				0B8DF0D51FC05A3A00292F4F /* FlickrCell.swift in Sources */,
 				0B8DF0A21FC028F700292F4F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
