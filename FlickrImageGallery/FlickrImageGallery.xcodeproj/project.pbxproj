@@ -119,17 +119,9 @@
 		0B8DF0C11FC02D6300292F4F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0B8DF0C21FC02D6300292F4F /* Detail */,
 				0B8DF0C31FC02D6300292F4F /* List */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		0B8DF0C21FC02D6300292F4F /* Detail */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Detail;
 			sourceTree = "<group>";
 		};
 		0B8DF0C31FC02D6300292F4F /* List */ = {

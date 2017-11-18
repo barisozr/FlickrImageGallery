@@ -59,6 +59,10 @@ class ExtensionsTests: XCTestCase {
         XCTAssertEqual(" (\"barisozr\")".getAuthorName(), "barisozr")
     }
     
+    func testGetAuthorNameCorrect3() {
+        XCTAssertEqual("nobody@flickr.com (\"Jo\\u00e3o Antonio\")".getAuthorName(), "João Antonio")
+    }
+    
     //MARK: Date Extension Tests
     
     func testToStringCorrect() {

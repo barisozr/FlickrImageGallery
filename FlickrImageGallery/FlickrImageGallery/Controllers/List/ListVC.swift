@@ -10,18 +10,24 @@ import UIKit
 
 class ListVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
+    //MARK: Constants
     private let reuseIdentifier = "FlickrCell"
     private let minSpacing:CGFloat = 8
     private let footerHeight:CGFloat = 50
 
+    //MARK: Variables
+    var currentItem:FlickrItem?
     var medias = [String]()
     var items = [FlickrItem]()
     var cellSize = CGSize.zero
-    var isRequestSend = false
+    var isRequestSend = false, isFinished = false
 
+    //MARK: View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.title = currentItem?.author ?? "Photos"
         let width:CGFloat = (UIScreen.main.bounds.size.width - (3 * minSpacing)) / 2
         cellSize = CGSize(width: width, height: width)
         getPhotos()
@@ -32,38 +38,45 @@ class ListVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         // Dispose of any resources that can be recreated.
     }
     
-    func getPhotos() {
-        if !isRequestSend {
+    //MARK: Private Methods
+    
+    private func getPhotos() {
+        if !isRequestSend && !isFinished {
             isRequestSend = true
-            NetworkManager.sharedManager.getPhotos {[weak self] (result) in
+            NetworkManager.sharedManager.getPhotos(userId: currentItem?.authorId, completion: {[weak self] (result) in
                 DispatchQueue.main.async {
                     self?.addItems(from: result)
                 }
-            }
+            })
         }
     }
     
-    func addItems(from list:[FlickrItem]?) {
+    private func addItems(from list:[FlickrItem]?) {
         if let l = list {
+            var isItemAdded = false
             for item in l {
                 if let m = item.media?.absoluteString, m.isNonEmpty, !medias.contains(m) {
                     items.append(item)
                     medias.append(m)
+                    isItemAdded = true
                 }
             }
+            isFinished = !isItemAdded
         }
         collectionView?.reloadData()
         isRequestSend = false
     }
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+    
+    private func openItem(_ item:FlickrItem) {
+        if let itemAuthorId = item.authorId, let currentId = currentItem?.authorId, itemAuthorId == currentId {
+            //You can present photo gallery if you want
+        }
+        else if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SID_List") as? ListVC {
+            vc.currentItem = item
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
-
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -82,6 +95,10 @@ class ListVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     //MARK: UICollectionViewDelegate
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        openItem(items[indexPath.row])
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
         if elementKind == UICollectionElementKindSectionFooter {
             getPhotos()
@@ -99,7 +116,7 @@ class ListVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.size.width, height: footerHeight)
+        return CGSize(width: collectionView.bounds.size.width, height: isFinished ? 0 : footerHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {

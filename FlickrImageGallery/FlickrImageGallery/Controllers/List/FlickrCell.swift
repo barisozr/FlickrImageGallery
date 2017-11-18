@@ -10,11 +10,13 @@ import UIKit
 
 class FlickrCell: UICollectionViewCell {
     
+    //MARK: Outlets
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var labelAuthor: UILabel!
     @IBOutlet weak var labelDate: UILabel!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
+    //MARK: Internal Methods
     func refresh(with item:FlickrItem) {
         labelAuthor.text = item.author
         labelDate.text = item.publishedDate?.toString()

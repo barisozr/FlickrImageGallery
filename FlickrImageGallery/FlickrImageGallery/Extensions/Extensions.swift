@@ -18,6 +18,7 @@ extension String {
         return Date.inputFormatter.date(from: self)
     }
     
+    //Unicode character help: https://stackoverflow.com/questions/24318171/using-swift-to-unescape-unicode-characters-ie-u1234
     func getAuthorName() -> String {
         var trimmed = self
         if let index = trimmed.index(of: "\"") {
@@ -26,7 +27,10 @@ extension String {
         if let index = trimmed.index(of: "\"") {
             trimmed = String(trimmed[..<index])
         }
-        return trimmed
+        let transform = "Any-Hex/Java"
+        let converted = NSMutableString(string: trimmed)
+        CFStringTransform(converted, nil, transform as NSString, true)
+        return converted as String
     }
 }
 

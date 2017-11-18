@@ -25,9 +25,13 @@ struct NetworkManager {
     static let sharedManager = NetworkManager()
     private init() {}
     
-    func getPhotos(completion:@escaping flickrItemResponseHandler) {
+    func getPhotos(userId:String? = nil, completion:@escaping flickrItemResponseHandler) {
         let urlComponents = NSURLComponents(string: baseUrl + Paths.publicPhotos.rawValue)
-        urlComponents?.queryItems = [formatQuery, jsonQuery]
+        var items = [formatQuery, jsonQuery]
+        if let id = userId, id.isNonEmpty {
+            items.append(URLQueryItem(name: "id", value: id))
+        }
+        urlComponents?.queryItems = items
         if let url = urlComponents?.url {
             let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
                 if let d = data, let dict = d.toDictionary(), let items = dict["items"] as? [[String:Any]], error == nil, items.count > 0 {
