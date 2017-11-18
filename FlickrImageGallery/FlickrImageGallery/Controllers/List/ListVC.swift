@@ -8,27 +8,54 @@
 
 import UIKit
 
-private let reuseIdentifier = "FlickrCell"
-private let minSpacing:CGFloat = 4
-
 class ListVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-    
+
+    private let reuseIdentifier = "FlickrCell"
+    private let minSpacing:CGFloat = 8
+    private let footerHeight:CGFloat = 50
+
+    var medias = [String]()
     var items = [FlickrItem]()
     var cellSize = CGSize.zero
+    var isRequestSend = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         let width:CGFloat = (UIScreen.main.bounds.size.width - (3 * minSpacing)) / 2
         cellSize = CGSize(width: width, height: width)
+        getPhotos()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func getPhotos() {
+        if !isRequestSend {
+            isRequestSend = true
+            NetworkManager.sharedManager.getPhotos {[weak self] (result) in
+                DispatchQueue.main.async {
+                    self?.addItems(from: result)
+                }
+            }
+        }
+    }
+    
+    func addItems(from list:[FlickrItem]?) {
+        if let l = list {
+            for item in l {
+                if let m = item.media?.absoluteString, m.isNonEmpty, !medias.contains(m) {
+                    items.append(item)
+                    medias.append(m)
+                }
+            }
+        }
+        collectionView?.reloadData()
+        isRequestSend = false
+    }
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -36,7 +63,6 @@ class ListVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
     }
-    */
 
     // MARK: UICollectionViewDataSource
 
@@ -53,11 +79,31 @@ class ListVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         cell.refresh(with: items[indexPath.row])
         return cell
     }
+    
+    //MARK: UICollectionViewDelegate
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionElementKindSectionFooter {
+            getPhotos()
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CRVLoading", for: indexPath)
+    }
 
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return cellSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.size.width, height: footerHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize.zero
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

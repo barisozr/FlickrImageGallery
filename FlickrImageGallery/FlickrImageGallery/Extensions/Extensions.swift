@@ -10,16 +10,19 @@ import Foundation
 
 extension String {
     
+    var isNonEmpty:Bool {
+        return !isEmpty
+    }
+    
     func toDate() -> Date? {
         return Date.inputFormatter.date(from: self)
     }
     
     func getAuthorName() -> String {
         var trimmed = self.replacingOccurrences(of: "nobody@flickr.com ", with: "")
-        if trimmed.count > 1 {
-            trimmed.remove(at: trimmed.startIndex)
-            trimmed.remove(at: trimmed.endIndex)
-        }
+        trimmed = String(trimmed.dropFirst())
+        trimmed = String(trimmed.dropLast())
+        trimmed = trimmed.replacingOccurrences(of: "\"", with: "")
         return trimmed
     }
 }
@@ -40,5 +43,18 @@ extension Date {
     
     func toString() -> String {
         return Date.outputFormatter.string(from: self)
+    }
+}
+
+extension Data {
+    
+    func toDictionary() -> [String:Any]? {
+        do {
+            return try JSONSerialization.jsonObject(with: self, options: []) as? [String:Any]
+        }
+        catch let e {
+            print("JSON -> [String:Any] exception \(e.localizedDescription)")
+            return nil
+        }
     }
 }

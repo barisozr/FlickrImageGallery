@@ -13,10 +13,21 @@ class FlickrCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var labelAuthor: UILabel!
     @IBOutlet weak var labelDate: UILabel!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     func refresh(with item:FlickrItem) {
         labelAuthor.text = item.author
         labelDate.text = item.publishedDate?.toString()
-        //TO-DO: Download image
+        imageView.image = nil
+        loadingIndicator.startAnimating()
+        NetworkManager.downloadImage(url: item.media) {[weak self] (image) in
+            if let img = image {
+                self?.imageView.image = img
+            }
+            else {
+                self?.imageView.image = UIImage(named: "noImage")
+            }
+            self?.loadingIndicator.stopAnimating()
+        }
     }
 }

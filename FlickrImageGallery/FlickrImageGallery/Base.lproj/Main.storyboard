@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Collection View Controller-->
+        <!--Photos-->
         <scene sceneID="Dd4-en-q3m">
             <objects>
-                <collectionViewController id="bg1-dT-Zk8" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="SID_List" id="bg1-dT-Zk8" customClass="ListVC" customModule="FlickrImageGallery" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="NFh-Eb-4Mc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -20,7 +20,7 @@
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PdK-DR-3KQ">
                             <size key="itemSize" width="150" height="150"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="50" height="40"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -34,7 +34,7 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ygm-YD-1oC">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LjG-vZ-XpU">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LjG-vZ-XpU">
                                                     <rect key="frame" x="0.0" y="0.0" width="150" height="130"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mJA-BL-ltL">
@@ -49,6 +49,10 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="bSC-yx-xt4">
+                                                    <rect key="frame" x="57" y="57" width="37" height="37"/>
+                                                    <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
@@ -57,6 +61,8 @@
                                                 <constraint firstItem="LjG-vZ-XpU" firstAttribute="leading" secondItem="ygm-YD-1oC" secondAttribute="leading" id="9bf-6x-7dp"/>
                                                 <constraint firstItem="LjG-vZ-XpU" firstAttribute="top" secondItem="ygm-YD-1oC" secondAttribute="top" id="PEr-6E-1e8"/>
                                                 <constraint firstAttribute="trailing" secondItem="2u6-eC-pJq" secondAttribute="trailing" constant="4" id="SoC-69-a6p"/>
+                                                <constraint firstItem="bSC-yx-xt4" firstAttribute="centerX" secondItem="ygm-YD-1oC" secondAttribute="centerX" id="Vwa-lR-gLL"/>
+                                                <constraint firstItem="bSC-yx-xt4" firstAttribute="centerY" secondItem="ygm-YD-1oC" secondAttribute="centerY" id="Wqs-hl-hq3"/>
                                                 <constraint firstItem="2u6-eC-pJq" firstAttribute="top" secondItem="mJA-BL-ltL" secondAttribute="top" id="XFu-9u-bpA"/>
                                                 <constraint firstItem="mJA-BL-ltL" firstAttribute="leading" secondItem="ygm-YD-1oC" secondAttribute="leading" constant="4" id="akA-zS-q1x"/>
                                                 <constraint firstItem="2u6-eC-pJq" firstAttribute="bottom" secondItem="mJA-BL-ltL" secondAttribute="bottom" id="cmG-GL-uc9"/>
@@ -77,15 +83,30 @@
                                     <outlet property="imageView" destination="LjG-vZ-XpU" id="C8F-ty-7mT"/>
                                     <outlet property="labelAuthor" destination="mJA-BL-ltL" id="2vC-nU-jSN"/>
                                     <outlet property="labelDate" destination="2u6-eC-pJq" id="vYf-oo-tOr"/>
+                                    <outlet property="loadingIndicator" destination="bSC-yx-xt4" id="aGh-8Z-QTd"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="CRVLoading" id="08A-UJ-Yq0">
+                            <rect key="frame" x="0.0" y="150" width="375" height="40"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ty1-LP-ZbP">
+                                    <rect key="frame" x="169" y="1.5" width="37" height="37"/>
+                                    <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </activityIndicatorView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="ty1-LP-ZbP" firstAttribute="centerY" secondItem="08A-UJ-Yq0" secondAttribute="centerY" id="T08-VQ-kei"/>
+                                <constraint firstItem="ty1-LP-ZbP" firstAttribute="centerX" secondItem="08A-UJ-Yq0" secondAttribute="centerX" id="hyf-5E-fwd"/>
+                            </constraints>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="bg1-dT-Zk8" id="vTe-Pf-6sA"/>
                             <outlet property="delegate" destination="bg1-dT-Zk8" id="Eca-JQ-Z5E"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="1Yf-3q-h3U"/>
+                    <navigationItem key="navigationItem" title="Photos" id="1Yf-3q-h3U"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KxQ-d4-hkr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
